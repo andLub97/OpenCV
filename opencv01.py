@@ -18,11 +18,11 @@ cv2_imshow(img)
 
 max = img.copy()
 
-cv2_imshow(cv2.rectangle(max,(600,600),(1200,1200),(0,0,255),3))
+cv2_imshow(cv2.rectangle(max, (600, 600), (1200, 1200), (0, 0, 255), 3))
 
 max
 
 max2 = max.copy()
 
 font = cv2.FONT_HERSHEY_SIMPLEX
-cv2_imshow(cv2.putText(max2, 'MAX',(600,1200),font,1,(0,0,255),3))
+cv2_imshow(cv2.putText(max2, 'MAX', (600, 1200), font, 1, (0, 0, 255), 3))
