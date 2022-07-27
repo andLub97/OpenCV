@@ -18,7 +18,9 @@ cv2_imshow(image)
 gray=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
 cv2_imshow(gray)
 
-kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(10,3))
+#kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(10,3))
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(40,3))
+
 black_hat = cv2.morphologyEx(gray,cv2.MORPH_BLACKHAT, kernel)
 
 cv2_imshow(black_hat)
@@ -44,5 +46,23 @@ cv2_imshow(gradient_x)
 
 gradient_x=cv2.GaussianBlur(gradient_x,(5,5),0)
  gradient_x=cv2.morphologyEx(gradient_x,cv2.MORPH_CLOSE,kernel)
- thres=cv2.threshold(gradient_x,0,255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)
- cv2_imshow(gradient_x)
+ thres=cv2.threshold(gradient_x,0,255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+ cv2_imshow(thres)
+
+thres = cv2.erode(thres, None, iterations=3)
+thres = cv2.dilate(thres, None, iterations=6)
+#cv2_imshow(thres)
+
+contornos = cv2.findContours(thres.copy(), cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+contornos=imutils.grab_contours(contornos)
+contornos=sorted(contornos, key=cv2.contourArea, reverse=True)[:5]
+
+for c in contornos:
+  (x,y,w,h) = cv2.boundingRect(c)
+  proporcao=w/h
+
+  if proporcao >= 2 and proporcao <=6:
+    area_placa_identificada=gray[y:y+h,x:x+w]
+    placa_recortada=cv2.threshold(area_placa_identificada,0,255,cv2.THRESH_BINARY |cv2.THRESH_OTSU)[1]
+    cv2_imshow(placa_recortada)
+
